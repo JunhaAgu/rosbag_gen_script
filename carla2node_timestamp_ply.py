@@ -280,7 +280,7 @@ def save_data2node(bag, kitti, kitti_type, initial_time):
             tf_msg = TFMessage()
             tf_stamped = TransformStamped()
             tf_stamped.header.stamp = rospy.Time.from_sec(timestamp)
-            tf_stamped.header.frame_id = '/map'
+            tf_stamped.header.frame_id = '/map' #/map
             tf_stamped.child_frame_id = 'camera_left'
 
             t = tf_matrix[0:3, 3]
@@ -314,7 +314,7 @@ def save_data2node(bag, kitti, kitti_type, initial_time):
 
             header = Header()
             header.seq = kitti.frame_range[count]
-            header.frame_id = "/map"
+            header.frame_id = "/map" #/map
             header.stamp = rospy.Time.from_sec(timestamp)
             fields = [PointField('x', 0, PointField.FLOAT32, 1),
                       PointField('y', 4, PointField.FLOAT32, 1),
@@ -395,8 +395,8 @@ def save_data2node(bag, kitti, kitti_type, initial_time):
 
 
 def main():
-    ABS_PATH = "/mnt/g/mapless_dataset/CARLA_timestamp" #"/media/shapelim/UX960NVMe1/kitti_semantic/dataset"
-    SAVE_PATH = "/mnt/g/mapless_dataset" #"/media/shapelim/UX960NVMe1/kitti_semantic/rosbag_final_ERASOR/seq05"
+    ABS_PATH = "/mnt/h/mapless_dataset/CARLA_timestamp" #"/media/shapelim/UX960NVMe1/kitti_semantic/dataset"
+    SAVE_PATH = "/mnt/h/mapless_dataset" #"/media/shapelim/UX960NVMe1/kitti_semantic/rosbag_final_ERASOR/seq05"
     parser = argparse.ArgumentParser(description="Convert CARLA dataset to ROS bag file the easy way!")
     # Accepted argument values
     kitti_types = ["raw_synced", "odom_color", "odom_gray", "odom_noimg"]
@@ -410,10 +410,10 @@ def main():
     parser.add_argument("--savedir", default=SAVE_PATH, help="base directory of the dataset, if no directory passed the deafult is current working directory")
     parser.add_argument("-t", "--date", default=None, help="date of the raw dataset (i.e. 2011_09_26), option is only for RAW datasets.")
     parser.add_argument("-r", "--drive", default=None, help="drive number of the raw dataset (i.e. 0001), option is only for RAW datasets.")
-    parser.add_argument("-s", "--sequence", default="03", choices=odometry_sequences, help="sequence of the odometry dataset (between 00 - 21), option is only for ODOMETRY datasets.")
+    parser.add_argument("-s", "--sequence", default="02", choices=odometry_sequences, help="sequence of the odometry dataset (between 00 - 21), option is only for ODOMETRY datasets.")
     parser.add_argument("-i", "--init_stamp", default=9, type=int) #000010.bin --> 9
     parser.add_argument("-itv", "--interval", default=1, type=int)
-    parser.add_argument("-e", "--end_stamp", default=402, type=int) #000440.bin --> 442
+    parser.add_argument("-e", "--end_stamp", default=372, type=int) #000440.bin --> 442
     args = parser.parse_args()
 
     bridge = CvBridge()
@@ -441,7 +441,7 @@ def main():
     interval = args.interval
 
     frame_range = [init_stamp] + range(init_stamp, final_stamp, interval)
-    bag = rosbag.Bag(os.path.join(args.savedir, "{}_{}_to_{}_w_interval_{}_node.bag".format(args.sequence, init_stamp,
+    bag = rosbag.Bag(os.path.join(args.savedir, "carla_w_time_{}_{}_to_{}_w_interval_{}_node.bag".format(args.sequence, init_stamp,
                                                                                               final_stamp, interval)),
                                                                                               'w', compression=compression)
 
